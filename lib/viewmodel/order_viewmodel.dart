@@ -38,8 +38,11 @@ class OrderViewModel with ChangeNotifier {
         return;
       }
 
-      final ordersRef =
-          _firestore.collection('users').doc(user.uid).collection('orders').orderBy('timestamp', descending: true);
+      final ordersRef = _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('orders')
+          .orderBy('timestamp', descending: true);
 
       final snapshot = await ordersRef.get();
 
@@ -50,6 +53,7 @@ class OrderViewModel with ChangeNotifier {
       } else {
         _orders =
             snapshot.docs.map((doc) => OrderModel.fromFirestore(doc)).toList();
+        notifyListeners();
       }
     } catch (e) {
       print('Error fetching orders: $e');
